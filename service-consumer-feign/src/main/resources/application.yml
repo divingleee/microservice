@@ -1,0 +1,65 @@
+###服务端口号
+server:
+  port: 8088
+  servlet:
+    path: /consumer-feign
+##定义服务名称
+spring:
+  application:
+    name: dl-service-consumer-feign
+  profiles:
+    active: local
+###eureka 基本信息配置
+eureka:
+  instance:
+    ###注册到 eureka ip 地址
+    hostname: 127.0.0.1
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+  client:
+    ###当前服务注册到 eureka 服务地址
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:8100/eureka/,http://${eureka.instance.hostname}:9100/eureka/
+    ###将自己注册给自己的注册中心
+    register-with-eureka: true
+    ###检索服务
+    fetch-registry: true
+#配置 feign
+feign:
+  hystrix:
+    enabled: true #必须设置才有效
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+
+#配置 ribbon 细粒度到指定的服务
+#dl-service-provider:
+#  ribbon:
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule #配置规则 随机
+#    ConnectTimeout: 5000
+#    ReadTimeout: 5000
+##    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule #配置规则 随机
+##    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule #配置规则 轮询
+##    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RetryRule #配置规则 重试
+##    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.WeightedResponseTimeRule #配置规则 响应时间权重
+##    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.BestAvailableRule #配置规则 最空闲连接策略
+##    ConnectTimeout: 500 #请求连接超时时间
+##    ReadTimeout: 1000 #请求处理的超时时间
+#    OkToRetryOnAllOperations: true #对所有请求都进行重试
+#    MaxAutoRetriesNextServer: 2 #切换实例的重试次数
+#    MaxAutoRetries: 1 #对当前实例的重试次数
+
+#hystrix 配置
+hystrix:
+  command:
+    default:
+      execution:
+#        timeout:
+#          enabled: false #是否禁止hystrix超时时间，默认开
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000 #设置超时时间 10s
