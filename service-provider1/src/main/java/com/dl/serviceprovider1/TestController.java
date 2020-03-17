@@ -27,7 +27,8 @@ public class TestController {
         }
 
         try {
-            Thread.sleep(3000);
+            //这里超时触发服务降级
+            Thread.sleep(6000);
         } catch (InterruptedException e) {
 
         }
