@@ -3,6 +3,9 @@ package com.dl.serviceconsumerfeign;
 import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 带 error 的 fallback
+ */
 //@Component
 @Slf4j
 public class HystrixFactoryProviderApiFeignFallback implements FallbackFactory<ProviderApiFeign> {

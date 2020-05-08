@@ -1,0 +1,26 @@
+###服务端口号
+server:
+  port: 8000
+  servlet:
+    path: /gateway1
+##定义服务名称
+spring:
+  application:
+    #不要用下划线，会出错
+    name: dl-gateway
+  profiles:
+    active: local
+  cloud:
+    #nacos 配置
+    nacos:
+      #配置 nacos 服务地址
+      server-addr: 127.0.0.1:8848
+    gateway:
+      routes:
+        - id: consumer_path
+          uri: lb://dl-service-consumer-feign
+          predicates:
+            - Path=/gateway1/consumer-feign/**
+          filters:
+            #这里的作用是把路径第一层路径 gateway1 去掉
+            - StripPrefix=1
